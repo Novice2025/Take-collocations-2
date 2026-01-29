@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NEXTATION – The Versatile Verb: To Take</title>
+    <meta name="description" content="Master the most common and idiomatic uses of the English verb ‘to take’ (Português: levar, pegar, tirar).">
+    <meta name="theme-color" content="#02030b">
+    <style>
+        /* ---------- CSS VARIABLES ---------- */
+        :root{
+            --bg-main:#02030b;
+            --card-bg:rgba(15,18,40,0.92);
+            --card-soft-bg:rgba(18,21,50,0.88);
+            --accent-cyan:#4ef2ff;
+            --accent-pink:#ff2f92;
+            --accent-green:#4dff9b;
+            --accent-yellow:#ffe25f;
+            --accent-purple:#aa5dff;
+            --muted:rgba(255,255,255,0.65);
+            --border-glow:rgba(120,120,255,0.45);
+            --shadow-soft:0 0 20px rgba(0,0,0,0.65);
+            --radius-lg:22px;
+            --radius-md:16px;
+            --radius-sm:10px;
+            --transition-fast:.18s ease-out;
+            --transition-med:.28s ease-out;
+        }
+
+        /* ---------- GLOBAL RESET ---------- */
+        *{margin:0;padding:0;box-sizing:border-box;}
+        html,body{
+            width:100%;height:100%;
+            background:var(--bg-main);
+            color:#fff;
+            font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',sans-serif;
+            font-size:16px;line-height:1.5;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+
+        /* ---------- TYPOGRAPHY ---------- */
+        .lesson-title,.panel-title,.situation-title,.expression-card-title,
+        .expression-card-pronunciation,.expression-category-title,.exercise-section h4{
+            font-family:'Space Grotesk','Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',sans-serif;
+        }
+
+        /* ---------- LAYOUT ---------- */
+        #app{width:100%;min-height:100vh;display:flex;flex-direction:column;}
+        .app-container{width:100%;min-height:100vh;background:var(--bg-main);display:flex;flex-direction:column;}
+        .neon-top-bar{height:6px;background:linear-gradient(90deg,#00f5ff,#ff2f92,#ffe25f,#4dff9b);box-shadow:0 0 20px rgba(78,242,255,.6);}
+        .app-main{flex:1;padding:40px 20px;max-width:1200px;margin:0 auto;width:100%;display:flex;flex-direction:column;}
+        .lesson-view{width:100%;}
+        .lesson-header{text-align:center;margin-bottom:40px;}
+        .lesson-title{font-size:48px;font-weight:700;letter-spacing:.12em;background:linear-gradient(90deg,var(--accent-cyan),var(--accent-pink));
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 15px;}
+        .lesson-description{color:var(--muted);font-size:18px;margin:0;}
+
+        /* ---------- PANELS ---------- */
+        .content-panel{background:var(--card-bg);border:1px solid var(--border-glow);border-radius:var(--radius-lg);
+            padding:40px;box-shadow:var(--shadow-soft);animation:fadeIn .4s ease-out;}
+        .panel-title{font-size:32px;font-weight:700;color:var(--accent-cyan);margin-bottom:30px;text-align:center;}
+
+        /* ---------- EXPRESSION CARD ---------- */
+        .expression-card{background:var(--card-soft-bg);border:1px solid rgba(78,242,255,.3);
+            border-radius:var(--radius-md);padding:30px;margin-bottom:30px;text-align:center;
+            box-shadow:0 0 10px rgba(78,242,255,.2);}
+        .expression-card-title{font-size:36px;font-weight:700;color:var(--accent-yellow);margin-bottom:10px;}
+        .expression-card-pronunciation{font-size:20px;font-style:italic;color:var(--accent-purple);margin-bottom:20px;}
+        .expression-card-description{font-size:18px;color:#fff;}
+
+        /* ---------- EXERCISE SECTIONS ---------- */
+        .exercise-section{background:var(--card-soft-bg);border:1px solid rgba(255,47,146,.3);
+            border-radius:var(--radius-md);padding:25px;margin-bottom:25px;box-shadow:0 0 10px rgba(255,47,146,.2);}
+        .exercise-section h4{font-size:24px;color:var(--accent-pink);margin-bottom:15px;text-align:center;}
+        .exercise-section textarea{width:100%;min-height:80px;padding:10px;margin-top:10px;border-radius:var(--radius-sm);border:none;background:rgba(255,255,255,.1);color:#fff;}
+        .exercise-section button.check-btn{margin-top:10px;padding:8px 16px;background:var(--accent-cyan);border:none;border-radius:var(--radius-sm);color:#000;cursor:pointer;}
+        .feedback-message{margin-top:8px;font-weight:600;}
+        .show-answer-btn{margin-top:10px;padding:6px 12px;background:var(--accent-green);border:none;border-radius:var(--radius-sm);color:#000;cursor:pointer;}
+
+        /* ---------- NAVIGATION ---------- */
+        .tab-navigation,.category-tab-navigation{display:flex;gap:8px;margin-bottom:20px;justify-content:center;}
+        .tab-btn,.category-tab-btn,.nav-btn{padding:8px 16px;background:rgba(255,255,255,.1);border:none;border-radius:var(--radius-sm);color:#fff;cursor:pointer;transition:var(--transition-fast);}
+        .tab-btn.active,.category-tab-btn.active,.nav-btn{background:var(--accent-cyan);color:#000;}
+        .expression-selector{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px;}
+        .expression-selector .btn{padding:6px 12px;background:rgba(255,255,255,.1);border:none;border-radius:var(--radius-sm);color:#fff;cursor:pointer;}
+        .expression-selector .btn.active{background:var(--accent-pink);color:#000;}
+
+        /* ---------- SITUATIONS ---------- */
+        .situations-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:20px;}
+        .situation-card{background:var(--card-soft-bg);border:1px solid rgba(78,242,255,.2);border-radius:var(--radius-md);padding:15px;}
+        .situation-title{font-weight:700;color:var(--accent-yellow);margin-bottom:5px;}
+        .example,.context{font-size:14px;color:#ddd;}
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* -------------------------------------------------
+   STATE & DATA
+------------------------------------------------- */
+const state = {
+    currentLesson: null,
+    currentCategoryIndex: 0,
+    currentExpressionIndex: 0,
+    currentTab: 1          // 1 = Expression, 2 = Situations
+};
+
+/* -------------------------------------------------
+   LESSON DATA – ONLY THE EXPRESSIONS YOU PROVIDED
+------------------------------------------------- */
+const lessonData = {
+    title: "The Versatile Verb: To Take",
+    description: "Explore 19 essential ‘take’ expressions (Português: levar, pegar, tirar).",
+    categories: [
+        {
+            name: "Part 1 – Core Actions",
+            expressions: [
+                {
+                    id: "take-a-seat",
+                    expression: "Take a seat 🪑",
+                    pronunciation: "/teɪk ə siːt/",
+                    whenToUse: "Invite someone to sit down.",
+                    situations: [
+                        {situation:"Meeting",example:"Please, take a seat.",context:"Sentar‑se"},
+                        {situation:"Classroom",example:"Take a seat and open your books.",context:"Sentar‑se"},
+                        {situation:"Restaurant",example:"Take a seat, we’ll be with you shortly.",context:"Sentar‑se"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present simple** with the pronoun **‘they’**.",
+                        model:"They take a seat near the window."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"_____ a seat before the movie starts.",
+                        answer:"Take"
+                    },
+                    translationExercise:{
+                        prompt:"Sentem‑se, por favor.",
+                        answer:"Take a seat, please."
+                    }
+                },
+                {
+                    id pronunciation: "/teɪk ə wɔːk/",
+                    whenToUse: "Suggest a short walk for relaxation or exercise.",
+                    situations: [
+                        {situation:"Break",example:"Let’s take a walk outside.",context:"Dar uma volta"},
+                        {situation:"Health",example:"Doctors recommend you take a walk daily.",context:"Dar uma caminhada"},
+                        {situation:"Idea",example:"Take a walk and think about it.",context:"Dar uma volta"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present continuous** with the pronoun **‘she’**.",
+                        model:"She is taking a walk in the park."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"We should _____ a walk after lunch.",
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Vamos dar uma volta.",
+                        answer:"Let's take a walk."
+                    }
+                },
+                {
+                    id: "take-notes",
+                    expression: "Take notes ✍️",
+                    pronunciation: "/teɪk nəʊts/",
+                    whenToUse: "Record information while listening or reading.",
+                    situations: [
+                        {situation:"Lecture",example:"I always take notes during class.",context:"Anotar"},
+                        {situation:"Meeting",example:"Please take notes of the decisions.",context:"Anotar"},
+                        {situation:"Research",example:"Take notes on the sources you find.",context:"Anotar"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **simple past** with the pronoun **‘we’**.",
+                        model:"We took notes during the presentation."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"During the workshop, I _____ notes.", 
+                        answer:"took"
+                    },
+                    translationExercise:{
+                        prompt:"Anote tudo que o professor disser.",
+                        answer:"Take notes of everything the teacher says."
+                    }
+                },
+                {
+                    id: "take-responsibility",
+                    expression: "Take responsibility 🛡️",
+                    pronunciation: "/teɪk rɪˈspɒnsɪbɪlɪti/",
+                    whenToUse: "Accept accountability for actions.",
+                    situations: [
+                        {situation:"Work",example:"She will take responsibility for the project.",context:"Assumir responsabilidade"},
+                        {situation:"Family",example:"He finally took responsibility for his mistakes.",context:"Assumir responsabilidade"},
+                        {situation:"Team",example:"We all need to take responsibility.",context:"Assumir responsabilidade"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present perfect** with the pronoun **‘I’**.",
+                        model:"I have taken responsibility for the error."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"They _____ responsibility for the delay.", 
+                        answer:"took"
+                    },
+                    translationExercise:{
+                        prompt:"Ele assumiu a responsabilidade pelo acidente.",
+                        answer:"He took responsibility for the accident."
+                    }
+                },
+                {
+                    id: "take-care",
+                    expression: "Take care 👋",
+                    pronunciation: "/teɪk keər/",
+                    whenToUse: "Say goodbye or advise someone to be careful.",
+                    situations: [
+                        {situation:"Farewell",example:"Take care, see you soon!",context:"Cuide‑se"},
+                        {situation:"Advice",example:"Take care when crossing the street.",context:"Tenha cuidado"},
+                        {situation:"Health",example:"Take care of your health.",context:"Cuide da sua saúde"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **imperative** with the pronoun **‘you’**.",
+                        model:"You, take care of the kids tonight."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"_____ care while driving.", 
+                        answer:"Take"
+                    },
+                    translationExercise:{
+                        prompt:"Cuide‑se!",
+                        answer:"Take care!"
+                    }
+                },
+                {
+                    id: "take-advantage-of",
+                    expression: "Take advantage of ✨",
+                    pronunciation: "/teɪk ədˈvæntɪdʒ ɒv/",
+                    whenToUse: "Make good use of an opportunity.",
+                    situations: [
+                        {situation:"Sale",example:"Take advantage of the discount.",context:"Aproveitar"},
+                        {situation:"Learning",example:"Take advantage of the free workshop.",context:"Aproveitar"},
+                        {situation:"Time",example:"Take advantage of the quiet morning.",context:"Aproveitar"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **future simple** with the pronoun **‘we’**.",
+                        model:"We will take advantage of the new software."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"You should _____ advantage of this offer.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Aproveite a oportunidade.",
+                        answer:"Take advantage of the opportunity."
+                    }
+                },
+                {
+                    id: "take-place",
+                    expression: "Take place 📍",
+                    pronunciation: "/teɪk pleɪs/",
+                    whenToUse: "Indicate where/when something happens.",
+                    situations: [
+                        {situation:"Event",example:"The concert will take place at the arena.",context:"Ocorrer"},
+                        {situation:"Meeting",example:"Our meeting takes place tomorrow.",context:"Ocorrer"},
+                        {situation:"Festival",example:"The festival takes place every summer.",context:"Ocorrer"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present simple** with the pronoun **‘it’**.",
+                        model:"It takes place at noon."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"The ceremony _____ take place next week.", 
+                        answer:"will"
+                    },
+                    translationExercise:{
+                        prompt:"A reunião ocorrerá às 10h.",
+                        answer:"The meeting will take place at 10 a.m."
+                    }
+                },
+                {
+                    id: "take-part-in",
+                    expression: "Take part in 🤝",
+                    pronunciation: "/teɪk pɑːt ɪn/",
+                    whenToUse: "Participate in an activity.",
+                    situations: [
+                        {situation:"Workshop",example:"She will take part in the workshop.",context:"Participar"},
+                        {situation:"Competition",example:"They took part in the competition.",context:"Participar"},
+                        {situation:"Discussion",example:"Take part in the discussion.",context:"Participar"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present continuous** with the pronoun **‘they’**.",
+                        model:"They are taking part in the project."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"We want you to _____ part in the survey.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Eles participaram da corrida.",
+                        answer:"They took part in the race."
+                    }
+                },
+                {
+                    id: "take-off",
+                    expression: "Take off 🚀",
+                    pronunciation: "/teɪk ɒf/",
+                    whenToUse: "Begin to fly or start rapidly (also metaphorical).",
+                    situations: [
+                        {situation:"Plane",example:"The plane will take off in ten minutes.",context:"Decolar"},
+                        {situation:"Business",example:"Sales took off after the ad campaign.",context:"Deslanchar"},
+                        {situation:"Clothing",example:"Please take off your shoes.",context:"Tirar"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **simple past** with the pronoun **‘the plane’**.",
+                        model:"The plane took off smoothly."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"The rocket _____ off at dawn.", 
+                        answer:"took"
+                    },
+                    translationExercise:{
+                        prompt:"O avião decolou às 8h.",
+                        answer:"The plane took off at 8 a.m."
+                    }
+                }
+            ]
+        },
+        {
+            name: "Part 2 – Idiomatic & Abstract Uses",
+            expressions: [
+                {
+                    id: "take-sb-to-court",
+                    expression: "Take sb. to court",
+                    pronunciation: "/teɪk ˈsʌmbədi tuː kɔːt/",
+                    whenToUse: "Initiate legal action against someone.",
+                    situations: [
+                        {situation:"Legal",example:"The company decided to take the contractor to court.",context:"Levar alguém ao tribunal"},
+                        {situation:"Dispute",example:"She will take him to court over the breach.",context:"Levar alguém ao tribunal"},
+                        {situation:"News",example:"He was taken to court for fraud.",context:"Levar alguém ao tribunal"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **future simple** with the pronoun **‘they’**.",
+                        model:"They will take him to court next month."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"The victims plan to _____ him to court.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Eles levaram o réu ao tribunal.",
+                        answer:"They took the defendant to court."
+                    }
+                },
+                {
+                    id: "take-sb-place",
+                    expression: "Take sb.’s place",
+                    pronunciation: "/teɪk ˈsʌmbədi ˈpleɪs/",
+                    whenToUse: "Replace someone in a role or position.",
+                    situations: [
+                        {situation:"Work",example:"She will take his place as manager.",context:"Assumir o lugar de alguém"},
+                        {situation:"Sports",example:"He took his teammate’s place on the field.",context:"Assumir o lugar de alguém"},
+                        {situation:"Event",example:"I’ll take your place at the meeting.",context:"Assumir o lugar de alguém"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present simple** with the pronoun **‘I’**.",
+                        model:"I take your place for the interview."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"When she left, John _____ her place.", 
+                        answer:"took"
+                    },
+                    translationExercise:{
+                        prompt:"Ele assumiu o lugar dela.",
+                        answer:"He took her place."
+                    }
+                },
+                {
+                    id: "take-sb-temperature",
+                    expression: "Take sb.’s temperature",
+                    pronunciation: "/teɪk ˈsʌmbədi ˈtɛmpərətʃər/",
+                    whenToUse: "Measure someone's body temperature.",
+                    situations: [
+                        {situation:"Doctor",example:"Nurse, please take the patient’s temperature.",context:"Medir a temperatura"},
+                        {situation:"Home",example:"I’ll take your temperature before school.",context:"Medir a temperatura"},
+                        {situation:"Clinic",example:"They take the child’s temperature every hour.",context:"Medir a temperatura"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present continuous** with the pronoun **‘the nurse’**.",
+                        model:"The nurse is taking the child’s temperature."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"Can you _____ my temperature?", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"A enfermeira mediu a temperatura do paciente.",
+                        answer:"The nurse took the patient’s temperature."
+                    }
+                },
+                {
+                    id: "take-sth-apart",
+                    expression: "Take sth. apart",
+                    pronunciation: "/teɪk ˈsʌmθɪŋ ə ˈpɑːt/",
+                    whenToUse: "Disassemble something to understand or repair it.",
+                    situations: [
+                        {situation:"Mechanic",example:"He took the engine apart to fix it.",context:"Desmontar"},
+                        {situation:"Student",example:"We took the poem apart line by line.",context:"Analisar"},
+                        {situation:"DIY",example:"Take the toy apart before re‑building.",context:"Desmontar"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **simple past** with the pronoun **‘we’**.",
+                        model:"We took the clock apart yesterday."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"She wants to _____ the gadget apart.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Eles desmontaram o motor.",
+                        answer:"They took the engine apart."
+                    }
+                },
+                {
+                    id: "take-sth-to-heart",
+                    expression: "Take sth. to heart",
+                    pronunciation: "/teɪk ˈsʌmθɪŋ tuː hɑːt/",
+                    whenToUse: "Feel deeply affected by something.",
+                    situations: [
+                        {situation:"Feedback",example:"Don’t take criticism to heart.",context:"Levar a sério"},
+                        {situation:"Advice",example:"She took his words to heart.",context:"Levar a sério"},
+                        {situation:"Loss",example:"He took the loss to heart.",context:"Levar a sério"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present simple** with the pronoun **‘you’**.",
+                        model:"You take my advice to heart."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"Please don’t _____ the comment to heart.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Ela levou as palavras dele a sério.",
+                        answer:"She took his words to heart."
+                    }
+                },
+                {
+                    id: "take-sth-seriously",
+                    expression: "Take sth./sb. seriously",
+                    pronunciation: "/teɪk ˈsʌmθɪŋ ˈsɪərɪəsli/",
+                    whenToUse: "Treat something or someone with importance.",
+                    situations: [
+                        {situation:"Work",example:"Take the deadline seriously.",context:"Levar a sério"},
+                        {situation:"Health",example:"Take your symptoms seriously.",context:"Levar a sério"},
+                        {situation:"Advice",example:"Take his warning seriously.",context:"Levar a sério"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **imperative** with the pronoun **‘you’**.",
+                        model:"You must take this warning seriously."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"We need to _____ the issue seriously.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Leve a situação a sério.",
+                        answer:"Take the situation seriously."
+                    }
+                },
+                {
+                    id: "take-the-lead",
+                    expression: "Take the lead",
+                    pronunciation: "/teɪk ðə liːd/",
+                    whenToUse: "Assume a leading role.",
+                    situations: [
+                        {situation:"Project",example:"She will take the lead on the new project.",context:"Assumir a liderança"},
+                        {situation:"Race",example:"He took the lead in the final lap.",context:"Assumir a liderança"},
+                        {situation:"Discussion",example:"Take the lead in the conversation.",context:"Assumir a liderança"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **future simple** with the pronoun **‘they’**.",
+                        model:"They will take the lead tomorrow."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"When the meeting starts, I will _____ the lead.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Ela assumiu a liderança da equipe.",
+                        answer:"She took the lead of the team."
+                    }
+                },
+                {
+                    id: "take-time-off",
+                    expression: "Take time off",
+                    pronunciation: "/teɪk taɪm ɒf/",
+                    whenToUse: "Pause work for rest or personal matters.",
+                    situations: [
+                        {situation:"Vacation",example:"I’m planning to take time off next month.",context:"Tirar férias"},
+                        {situation:"Sick",example:"He took time off because he was ill.",context:"Tirar licença"},
+                        {situation:"Burnout",example:"Take time off to recharge.",context:"Tirar um tempo"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **present continuous** with the pronoun **‘we’**.",
+                        model:"We are taking time off this weekend."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"She decided to _____ time off after the project.", 
+                        answer:"take"
+                    },
+                    translationExercise:{
+                        prompt:"Eles vão tirar um tempo de folga.",
+                        answer:"They will take time off."
+                    }
+                },
+                {
+                    id: "take-up-space",
+                    expression: "Take up (space)",
+                    pronunciation: "/teɪk ʌp speɪs/",
+                    whenToUse: "Occupy physical or metaphorical space.",
+                    situations: [
+                        {situation:"Furniture",example:"The sofa takes up a lot of space.",context:"Ocupar espaço"},
+                        {situation:"Conversation",example:"He takes up too much space in meetings.",context:"Ocupar espaço"},
+                        {situation:"Design",example:"Don’t let the logo take up too much space.",context:"Ocupar espaço"}
+                    ],
+                    participativeExercise:{
+                        prompt:"Write a sentence using this expression in the **simple past** with the pronoun **‘the table’**.",
+                        model:"The table took up most of the room."
+                    },
+                    fillInTheBlanks:{
+                        prompt:"The bookshelf _____ up a lot of space.", 
+                        answer:"takes"
+                    },
+                    translationExercise:{
+                        prompt:"A estante ocupa muito espaço.",
+                        answer:"The shelf takes up a lot of space."
+                    }
+                }
+            ]
+        }
+    ]
+};
+
+/* -------------------------------------------------
+   STATE HELPERS
+------------------------------------------------- */
+function switchCategory(idx){
+    state.currentCategoryIndex = idx;
+    state.currentExpressionIndex = 0;
+    state.currentTab = 1;
+    render();
+}
+function switchExpression(idx){
+    state.currentExpressionIndex = idx;
+    state.currentTab = 1;
+    render();
+}
+function switchTab(tab){ state.currentTab = tab; render(); }
+function navigateExpression(delta){
+    const cat = state.currentLesson.categories[state.currentCategoryIndex];
+    const len = cat.expressions.length;
+    state.currentExpressionIndex = (state.currentExpressionIndex + delta + len) % len;
+    state.currentTab = 1;
+    render();
+}
+
+/* -------------------------------------------------
+   CHECK FUNCTIONS
+------------------------------------------------- */
+function checkFillIn(id, correct){
+    const user = document.getElementById(id).value.trim().toLowerCase();
+    const feedback = document.getElementById(id+'-feedback');
+    if(user===correct.toLowerCase()){
+        feedback.textContent = '✅ Correct!';
+        feedback.style.color = '#4dff9b';
+    }else{
+        feedback.textContent = '❌ Try again.';
+        feedback.style.color = '#ff2f92';
+    }
+}
+function checkTranslation(id, correct){
+    const user = document.getElementById(id).value.trim().toLowerCase();
+    const feedback = document.getElementById(id+'-feedback');
+    if(user===correct.toLowerCase()){
+        feedback.textContent = '✅ Correct!';
+        feedback.style.color = '#4dff9b';
+    }else{
+        feedback.textContent = '❌ Try again.';
+        feedback.style.color = '#ff2f92';
+    }
+}
+
+/* -------------------------------------------------
+   RENDERING
+------------------------------------------------- */
+function renderTabContent(){
+    const cat = state.currentLesson.categories[state.currentCategoryIndex];
+    const expr = cat.expressions[state.currentExpressionIndex];
+
+    /* ---- Expression Card ---- */
+    const expressionCardHtml = `
+        <div class="expression-card">
+            <div class="expression-card-title">${expr.expression}</div>
+            <div class="expression-card-pronunciation">${expr.pronunciation}</div>
+            <div class="expression-card-description">${expr.whenToUse}</div>
+        </div>
+    `;
+
+    /* ---- Participative Exercise ---- */
+    const participativeExerciseHtml = `
+        <div class="exercise-section">
+            <h4>✍️ Participative Exercise</h4>
+            <p>${expr.participativeExercise.prompt}</p>
+            <textarea id="sentence-${expr.id}" placeholder="Write your sentence here..."></textarea>
+            <button class="show-answer-btn" onclick="document.getElementById('model-${expr.id}').style.display='block'">Show Answer</button>
+            <div id="model-${expr.id}" class="model-sentence" style="display:none;margin-top:8px;">
+                ${expr.participativeExercise.model}
+            </div>
+            <h5>Fill in the blanks</h5>
+            <p>${expr.fillInTheBlanks.prompt}</p>
+            <input type="text" id="fill-${expr.id}" placeholder="Your answer">
+            <button class="check-btn" onclick="checkFillIn('fill-${expr.id}', '${expr.fillInTheBlanks.answer}')">Check</button>
+            <div id="fill-${expr.id}-feedback" class="feedback-message"></div>
+        </div>
+    `;
+
+    /* ---- Translation Exercise ---- */
+    const translationExerciseHtml = `
+        <div class="exercise-section">
+            <h4>🌐 Translation Exercise</h4>
+            <p>${expr.translationExercise.prompt}</p>
+            <textarea id="trans-${expr.id}" placeholder="Write your translation..."></textarea>
+            <button class="check-btn" onclick="checkTranslation('trans-${expr.id}', '${expr.translationExercise.answer}')">Check</button>
+            <div id="trans-${expr.id}-feedback" class="feedback-message"></div>
+        </div>
+    `;
+
+    /* ---- Expression Selector ---- */
+    const selectorHtml = `
+        <div class="expression-selector">
+            ${cat.expressions.map((e,i)=>`
+                <button class="btn ${state.currentExpressionIndex===i?'active':''}"
+                        onclick="switchExpression(${i})">
+                    ${e.expression}
+                </button>
+            `).join('')}
+        </div>
+    `;
+
+    /* ---- Situations Grid ---- */
+    const situationsHtml = `
+        <div class="situations-grid">
+            ${expr.situations.map(s=>`
+                <div class="situation-card">
+                    <h3 class="situation-title">${s.situation}</h3>
+                    <p class="example">${s.example}</p>
+                    <p class="context">Português: ${s.context}</p>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    /* ---- Category Tab Navigation ---- */
+    const categoryTabs = `
+        <div class="category-tab-navigation">
+            <button class="category-tab-btn ${state.currentTab===1?'active':''}" onclick="switchTab(1)">Expression</button>
+            <button class="category-tab-btn ${state.currentTab===2?'active':''}" onclick="switchTab(2)">Situations</button>
+        </div>
+    `;
+
+    return `
+        <div class="content-panel">
+            <h2 class="panel-title">Explore the Verb “To Take”</h2>
+
+            <!-- Global Category Selector -->
+            <div class="tab-navigation">
+                ${state.currentLesson.categories.map((c,i)=>`
+                    <button class="tab-btn ${state.currentCategoryIndex===i?'active':''}"
+                            onclick="switchCategory(${i})">
+                        ${c.name}
+                    </button>
+                `).join('')}
+            </div>
+
+            <!-- Category Content -->
+            <div class="expression-category">
+                <h3 class="expression-category-title">${cat.name}</h3>
+                ${categoryTabs}
+
+                ${state.currentTab===1 ? `
+                    ${expressionCardHtml}
+                    ${participativeExerciseHtml}
+                    ${translationExerciseHtml}
+                    ${selectorHtml}
+                ` : `
+                    ${situationsHtml}
+                `}
+            </div>
+        </div>
+    `;
+}
+
+/* -------------------------------------------------
+   MAIN RENDER
+------------------------------------------------- */
+function render(){
+    const app = document.getElementById('app');
+    state.currentLesson = lessonData;   // initialise once
+    app.innerHTML = `
+        <div class="app-container">
+            <div class="neon-top-bar"></div>
+            <main class="app-main">
+                <div class="lesson-view">
+                    <div class="lesson-header">
+                        <h1 class="lesson-title">${state.currentLesson.title}</h1>
+                        <p class="lesson-description">${state.currentLesson.description}</p>
+                    </div>
+
+                    ${renderTabContent()}
+
+                    <div class="tab-footer">
+                        <button class="nav-btn" onclick="navigateExpression(-1)">
+                            <span class="material-icons">arrow_back</span> Back
+                        </button>
+                        <button class="nav-btn" onclick="navigateExpression(1)">
+                            Next <span class="material-icons">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    `;
+}
+
+/* -------------------------------------------------
+   INITIALISE
+------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+</html>
